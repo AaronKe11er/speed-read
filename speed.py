@@ -37,10 +37,6 @@ class Need_For_Speed():
                             self.the_book.append(x[1])
                         elif ',' in i:
                             self.the_book.append(i)
-                        # Removes the tabs
-                        elif '\t' in i:
-                            for x in i.split('\t'):
-                                self.the_book.append(x)
                         elif len(i) == 1 and i not in 'ai123456789':
                             prev_word = self.the_book[len(self.the_book)-1]
                             joined_word = prev_word+i
@@ -54,10 +50,18 @@ class Need_For_Speed():
                             next_word+=1
                         else:
                             self.the_book.append(i)
+                        self.remove_tabs(i)
                         tracker+=1
                         print('now page' + str(self.page_count))
             # input('Current page is ' + str(self.page_count) + '. Press Enter key to continue...')
             self.page_count+=1 
+
+    def remove_tabs(self, i):
+        if '\t' in i:
+            breakpoint()
+            self.the_book.remove(i)
+            for x in i.split('\t'):
+                self.the_book.append(x)
 
     def remove_white_spaces(self):
         for i in self.the_book:
@@ -92,13 +96,16 @@ class Need_For_Speed():
                 x = 800
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index])
                 print('Current Word: ' + str(self.index))
+                print(self.the_book[self.index])
             elif len(self.the_book[self.index]) >= 12:
                 x = 1000
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index])
                 print('Current Word: ' + str(self.index))
+                print(self.the_book[self.index])
             else:
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index])
                 print('Current Word: ' + str(self.index))
+                print(self.the_book[self.index])
             self.index+=1
         else:
             if self.back != 0:
