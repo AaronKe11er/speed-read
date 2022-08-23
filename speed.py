@@ -31,7 +31,9 @@ class Need_For_Speed():
                 for words in text.split('\n'):
                     for i in words.split(' '):
                         # Looking for periods and spliting up words via end and start of a sentence. 
-                        if '.' in i:
+                        if '\t' in i:
+                            self.remove_tabs(i)
+                        elif '.' in i:
                             x = i.split('.')
                             self.the_book.append(x[0])
                             self.the_book.append(x[1])
@@ -50,7 +52,6 @@ class Need_For_Speed():
                             next_word+=1
                         else:
                             self.the_book.append(i)
-                        self.remove_tabs(i)
                         tracker+=1
                         print('now page' + str(self.page_count))
             # input('Current page is ' + str(self.page_count) + '. Press Enter key to continue...')
@@ -58,8 +59,6 @@ class Need_For_Speed():
 
     def remove_tabs(self, i):
         if '\t' in i:
-            breakpoint()
-            self.the_book.remove(i)
             for x in i.split('\t'):
                 self.the_book.append(x)
 
