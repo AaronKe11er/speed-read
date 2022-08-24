@@ -7,8 +7,8 @@ import os
 import threading
 
 
-class Need_For_Speed():
-    def mainloop(self):
+class NeedForSpeed():
+    def main_loop(self):
         self.pdf_grabber()
         self.remove_white_spaces()
         self.tkinter_block()
@@ -16,12 +16,11 @@ class Need_For_Speed():
     def pdf_grabber(self):
         self.page_count = 25
         self.index = 0
-        self.paused = 0
+        self.paused = 1
         self.back = 0
         self.the_book = []
-        reader = PdfReader("/home/Aznable/Documents/Books/Building Microservices (Sam Newman) (z-lib.org).pdf")
+        reader = PdfReader("")
         number_of_pages = len(reader.pages)
-        tracker = 1
         five_pages = self.page_count + 5
         spell = SpellChecker()
         while self.page_count < five_pages:
@@ -31,31 +30,32 @@ class Need_For_Speed():
                 for words in text.split('\n'):
                     for i in words.split(' '):
                         # Looking for periods and spliting up words via end and start of a sentence. 
-                        if '\t' in i:
-                            self.remove_tabs(i)
-                        elif '.' in i:
-                            x = i.split('.')
-                            self.the_book.append(x[0])
-                            self.the_book.append(x[1])
-                        elif ',' in i:
-                            self.the_book.append(i)
-                        elif len(i) == 1 and i not in 'ai123456789':
-                            prev_word = self.the_book[len(self.the_book)-1]
-                            joined_word = prev_word+i
-                            self.the_book[len(self.the_book)-1] = joined_word
-                        elif '\n' in i:
-                            x = i.split('\n')
-                            self.the_book.append(x[0])
-                            self.the_book.append(x[1])
-                        elif len(i) == 1 and i.upper() == i and i not in '1234567890':
-                            next_word = self.the_book[len(self.the_book)+1]
-                            next_word+=1
-                        else:
-                            self.the_book.append(i)
-                        tracker+=1
-                        print('now page' + str(self.page_count))
+                        self.splice_array(i)
             # input('Current page is ' + str(self.page_count) + '. Press Enter key to continue...')
             self.page_count+=1 
+
+    def splice_array(self, i):
+        if '\t' in i:
+            self.remove_tabs(i)
+        elif '.' in i:
+            x = i.split('.')
+            self.the_book.append(x[0])
+            self.the_book.append(x[1])
+        elif ',' in i:
+            self.the_book.append(i)
+        elif len(i) == 1 and i not in 'ai123456789':
+            prev_word = self.the_book[len(self.the_book)-1]
+            joined_word = prev_word+i
+            self.the_book[len(self.the_book)-1] = joined_word
+        elif '\n' in i:
+            x = i.split('\n')
+            self.the_book.append(x[0])
+            self.the_book.append(x[1])
+        elif len(i) == 1 and i.upper() == i and i not in '1234567890':
+            next_word = self.the_book[len(self.the_book)+1]
+            next_word+=1
+        else:
+            self.the_book.append(i)
 
     def remove_tabs(self, i):
         if '\t' in i:
@@ -67,14 +67,6 @@ class Need_For_Speed():
             if i == ' ' or i == '':
                 self.the_book.remove(i)
 
-    def iono(self,the_book):
-        bad_words = []
-        for i in self.the_book:
-            if spell[i] == 0 or len(i) == 1 and i not in '1234567890' or i.split(',') != [i] or i.split('?') != [i] or i.split('!') != [i] or i.split('.') != [i] or i.split('-') != [i]:
-                breakpoint()
-                pass
-        breakpoint()
-
     def pause_book(self):
         global back
         global paused
@@ -85,10 +77,8 @@ class Need_For_Speed():
         global back
         self.back += 1  
         self.index = self.index - 1
-        print('checking: ' + str(self.index)) 
-        print(self.the_book[self.index]) 
 
-    def changeText(self):
+    def change_text(self):
         x = 350
         if self.paused % 2 == 0:
             if len(self.the_book[self.index]) >= 7 and len(self.the_book[self.index]) < 12:
@@ -117,7 +107,7 @@ class Need_For_Speed():
         root.geometry('900x400')
         mainContainer = Frame(root)
         self.label = Label(mainContainer, text="")
-        self.label.configure(text="msg will change every sec")
+        self.label.configure(font=("futura", 30), text="Press play to start \nreading your book")
         self.label.pack(side=LEFT, ipadx=5, ipady=5)
         mainContainer.pack()
         self.label.after(1000, self.changeText)
@@ -132,6 +122,15 @@ class Need_For_Speed():
         start_btn.pack()
         root.mainloop()
 
+    def pick_out_book(self):
+        root = Tk()
+        root.geometry('900x400')
+        mainContainer = Frame(root)
+        input_box = tk.Entry(root, text='stuff', width=100)
+        input_box.insert(0, 'Please choose your book')
+        input_box.pack()
+        root.mainloop()
 
-bearserkar = Need_For_Speed().mainloop()
+
+speedReader = NeedForSpeed().pick_out_book()
 
