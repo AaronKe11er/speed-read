@@ -1,4 +1,3 @@
-from spellchecker import SpellChecker
 from PyPDF2 import PdfReader
 from time import sleep
 from tkinter import *
@@ -22,7 +21,6 @@ class NeedForSpeed():
         reader = PdfReader("")
         number_of_pages = len(reader.pages)
         five_pages = self.page_count + 5
-        spell = SpellChecker()
         while self.page_count < five_pages:
             page = reader.pages[self.page_count]
             for x in page:
@@ -122,15 +120,4 @@ class NeedForSpeed():
         start_btn.pack()
         root.mainloop()
 
-    def pick_out_book(self):
-        root = Tk()
-        root.geometry('900x400')
-        mainContainer = Frame(root)
-        input_box = tk.Entry(root, text='stuff', width=100)
-        input_box.insert(0, 'Please choose your book')
-        input_box.pack()
-        root.mainloop()
-
-
-speedReader = NeedForSpeed().pick_out_book()
 
