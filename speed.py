@@ -1,4 +1,6 @@
 from PyPDF2 import PdfReader
+from tkinter import filedialog
+from tkinter import filedialog
 from time import sleep
 from tkinter import *
 import tkinter as tk
@@ -18,7 +20,7 @@ class NeedForSpeed():
         self.paused = 1
         self.back = 0
         self.the_book = []
-        reader = PdfReader("")
+        reader = PdfReader(self.file)
         number_of_pages = len(reader.pages)
         five_pages = self.page_count + 5
         while self.page_count < five_pages:
@@ -98,7 +100,7 @@ class NeedForSpeed():
             if self.back != 0:
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index - self.back])
             sleep(0.1)
-        self.label.after(x, self.changeText)
+        self.label.after(x, self.change_text)
 
     def tkinter_block(self):
         root = Tk()
@@ -108,16 +110,27 @@ class NeedForSpeed():
         self.label.configure(font=("futura", 30), text="Press play to start \nreading your book")
         self.label.pack(side=LEFT, ipadx=5, ipady=5)
         mainContainer.pack()
-        self.label.after(1000, self.changeText)
+        self.label.after(1000, self.change_text)
         root.title(self.page_count)
         start_text = tk.StringVar()
         back_text = tk.StringVar()
         start_text.set("Play/Pause")
         back_text.set("Go Back")
         start_btn = tk.Button(root, textvariable=start_text, command=self.pause_book, font=("futura", 15), fg="black", height=2, width=10)
+        breakpoint()
         back_btn = tk.Button(root, textvariable=back_text, command=self.back_book, font=("futura", 15), fg="black", height=2, width=10)
         back_btn.pack()
         start_btn.pack()
         root.mainloop()
 
+    def pick_out_book(self):
+        root = Tk()
+        root.geometry('900x400')
+        mainContainer = Frame(root)
+        input_box = tk.Entry(root, text='stuff', width=100)
+        input_box.insert(0, 'Please choose your book')
+        input_box.pack()
+        root.mainloop()
 
+
+speedReader = NeedForSpeed().pick_out_book()
