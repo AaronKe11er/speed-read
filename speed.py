@@ -117,19 +117,32 @@ class NeedForSpeed():
         start_text.set("Play/Pause")
         back_text.set("Go Back")
         start_btn = tk.Button(root, textvariable=start_text, command=self.pause_book, font=("futura", 15), fg="black", height=2, width=10)
-        breakpoint()
         back_btn = tk.Button(root, textvariable=back_text, command=self.back_book, font=("futura", 15), fg="black", height=2, width=10)
         back_btn.pack()
         start_btn.pack()
         root.mainloop()
 
     def pick_out_book(self):
+        from tkinter import filedialog
+        #setting up parent window
         root = Tk()
-        root.geometry('900x400')
-        mainContainer = Frame(root)
-        input_box = tk.Entry(root, text='stuff', width=100)
-        input_box.insert(0, 'Please choose your book')
-        input_box.pack()
+        self.file = 'Nothing selected'
+
+        #function definition for opening file dialog
+        def openf():
+            file = filedialog.askopenfilename(initialdir='/', title="select file")
+            self.file = file
+
+        file_open = Button(root, text="Open file", command= openf)
+        file_open.pack(pady=20)
+        start_text = tk.StringVar()
+        start_text.set("Play Book")
+        start_btn = tk.Button(root, textvariable=start_text, command=threading.Thread(target=self.main_loop).start, font=("futura", 9), fg="black", height=2, width=5)
+        start_btn.pack()
+        selected_book = tk.Label(root, text=self.file)
+        selected_book.pack()
+        root.geometry("350x200")
+        root.title("Select a Book")
         root.mainloop()
 
 
