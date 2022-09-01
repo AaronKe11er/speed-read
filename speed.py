@@ -131,18 +131,24 @@ class NeedForSpeed():
         #function definition for opening file dialog
         def openf():
             file = filedialog.askopenfilename(initialdir='/', title="select file")
-            self.file = file
-
-        file_open = Button(root, text="Open file", command= openf)
+            book_name.set('Selected')
+            title_of_book = 'Now click play to start book'
+            root.title(title_of_book)
+        
+        book_name = tk.StringVar()
+        book_name.set("Open file")
+        file_open = Button(root, textvariable=book_name, command=openf)
+        
         file_open.pack(pady=20)
         start_text = tk.StringVar()
+        title_of_book = "Select a Book"
         start_text.set("Play Book")
         start_btn = tk.Button(root, textvariable=start_text, command=threading.Thread(target=self.main_loop).start, font=("futura", 9), fg="black", height=2, width=5)
         start_btn.pack()
         selected_book = tk.Label(root, text=self.file)
         selected_book.pack()
         root.geometry("350x200")
-        root.title("Select a Book")
+        root.title(title_of_book)
         root.mainloop()
 
 
