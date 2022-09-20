@@ -114,12 +114,14 @@ class NeedForSpeed():
         root.title(self.page_count)
         start_text = tk.StringVar()
         back_text = tk.StringVar()
+        # breakpoint()
         start_text.set("Play/Pause")
         back_text.set("Go Back")
-        start_btn = tk.Button(root, textvariable=start_text, command=self.pause_book, font=("futura", 15), fg="black", height=2, width=10)
-        back_btn = tk.Button(root, textvariable=back_text, command=self.back_book, font=("futura", 15), fg="black", height=2, width=10)
+        start_btn = tk.Button(root, textvariable=start_text, command=self.pause_book, font=("futura", 15), bg='green', fg="black", height=2, width=10)
+        back_btn = tk.Button(root, textvariable=back_text, command=self.back_book, font=("futura", 15), bg='red', fg="black", height=2, width=10)
         back_btn.pack()
         start_btn.pack()
+        breakpoint()
         root.mainloop()
 
     def pick_out_book(self):
@@ -130,7 +132,7 @@ class NeedForSpeed():
 
         #function definition for opening file dialog
         def openf():
-            file = filedialog.askopenfilename(initialdir='/', title="select file")
+            self.file = filedialog.askopenfilename(initialdir='/home/Aznable/Documents/Books/', title="select file")
             book_name.set('Selected')
             title_of_book = 'Now click play to start book'
             root.title(title_of_book)
@@ -150,6 +152,7 @@ class NeedForSpeed():
         root.geometry("350x200")
         root.title(title_of_book)
         root.mainloop()
+        
 
 
 speedReader = NeedForSpeed().pick_out_book()
