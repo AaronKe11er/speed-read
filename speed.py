@@ -6,6 +6,7 @@ from tkinter import *
 import tkinter as tk
 import os
 import threading
+from PIL import Image, ImageTk
 
 
 class NeedForSpeed():
@@ -17,7 +18,7 @@ class NeedForSpeed():
     def pdf_grabber(self):
         self.page_count = 25
         self.index = 0
-        self.paused = 1
+        self.paused = False
         self.back = 0
         self.the_book = []
         reader = PdfReader(self.file)
@@ -37,10 +38,10 @@ class NeedForSpeed():
     def splice_array(self, i):
         if '\t' in i:
             self.remove_tabs(i)
-        elif '.' in i:
-            x = i.split('.')
-            self.the_book.append(x[0])
-            self.the_book.append(x[1])
+        # elif '.' in i:
+        #     x = i.split('.')
+        #     self.the_book.append(x[0])
+        #     self.the_book.append(x[1])
         elif ',' in i:
             self.the_book.append(i)
         elif len(i) == 1 and i not in 'ai123456789':
@@ -71,23 +72,23 @@ class NeedForSpeed():
         global back
         global paused
         self.back = 0
-        self.paused += 1
+        self.paused = not self.paused
         
     def back_book(self):
         global back
-        self.back += 1  
+        self.back += 1
         self.index = self.index - 1
 
     def change_text(self):
         x = 350
-        if self.paused % 2 == 0:
+        if self.paused:
             if len(self.the_book[self.index]) >= 7 and len(self.the_book[self.index]) < 12:
-                x = 800
+                x = 500
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index])
                 print('Current Word: ' + str(self.index))
                 print(self.the_book[self.index])
             elif len(self.the_book[self.index]) >= 12:
-                x = 1000
+                x = 800
                 self.label.configure(font=("futura", 70), text = self.the_book[self.index])
                 print('Current Word: ' + str(self.index))
                 print(self.the_book[self.index])
@@ -116,8 +117,8 @@ class NeedForSpeed():
         back_text = tk.StringVar()
         start_text.set("Play/Pause")
         back_text.set("Go Back")
-        start_btn = tk.Button(root, textvariable=start_text, command=self.pause_book, font=("futura", 15), fg="black", height=2, width=10)
-        back_btn = tk.Button(root, textvariable=back_text, command=self.back_book, font=("futura", 15), fg="black", height=2, width=10)
+        start_btn = tk.Button(root, text='Play/Pause', command=self.pause_book, font=("futura", 15), fg="black", height=2, width=10)
+        back_btn = tk.Button(root, text='Go Back', command=self.back_book, font=("futura", 15), fg="black", height=2, width=10)
         back_btn.pack()
         start_btn.pack()
         root.mainloop()
@@ -130,8 +131,33 @@ class NeedForSpeed():
 
         #function definition for opening file dialog
         def openf():
-            file = filedialog.askopenfilename(initialdir='/', title="select file")
-            self.file = file
+            path = old_path() 
+            file = filedialog.askopenfilename(initialdir=path, title="select file")
+            self.file=new_path(file)
+            self.selected_book = tk.Label(root, text=self.file)
+
+        def old_path():
+            with open('path.txt', 'r') as file:
+                line = file.read()
+                path = line.split('\n')[0]
+                print(path) 
+                if os.path.exists(path):
+                    return path
+                else:
+                    return '/'
+
+        def new_path(path):
+            with open('path.txt', 'r') as file:
+                old_p = file.read().split('\n')[0]
+                new_path = ''
+                for i in path.split('/')[1:-1]:
+                    new_path+='/'+i+'/'
+                    print(new_path)
+                if old_p != new_path:
+                    file.close()
+                    with open('path.txt', 'w') as file:
+                        file.write(new_path)
+                return path
 
         file_open = Button(root, text="Open file", command= openf)
         file_open.pack(pady=20)
@@ -139,8 +165,8 @@ class NeedForSpeed():
         start_text.set("Play Book")
         start_btn = tk.Button(root, textvariable=start_text, command=threading.Thread(target=self.main_loop).start, font=("futura", 9), fg="black", height=2, width=5)
         start_btn.pack()
-        selected_book = tk.Label(root, text=self.file)
-        selected_book.pack()
+        self.selected_book = tk.Label(root, text=self.file)
+        self.selected_book.pack()
         root.geometry("350x200")
         root.title("Select a Book")
         root.mainloop()

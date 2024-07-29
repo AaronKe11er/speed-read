@@ -3,7 +3,6 @@ from tkinter.filedialog import askopenfilename
 from speed import NeedForSpeed
 
 def openfile():
-
    filename = askopenfilename(parent=root)
    f = open(filename)
    f.read()
